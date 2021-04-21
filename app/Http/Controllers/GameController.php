@@ -35,17 +35,11 @@ class GameController extends Controller
     }
 
     public function setProfile(Request $request){
-        try{
-            Session::put('name', $request->name);
-            Session::put('email', $request->email);
+        Session::put('name', $request->name);
+        Session::put('email', $request->email);
 
-            $res['status'] = "S";
-            $res['message'] = "Profile saved";
-
-        } catch(Exception $e){
-            $res['status'] = "E";
-            $res['message'] = $e->getMessage();
-        }
+        $res['status'] = "S";
+        $res['message'] = "Profile saved";
 
         return response()->json($res);
     }

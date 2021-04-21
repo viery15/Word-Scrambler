@@ -145,7 +145,7 @@
             },
 
             async gameOver(){
-
+                this.game.stage--;
                 Swal.fire({
                     type: 'error',
                     title: 'You Got it Wrong',

@@ -54,10 +54,10 @@ Word Scramble Game
                         <strong>Stage @{{ game.stage }}</strong>
                     </div>
                     <div class="col">
-                        Lives : <span v-for="(heart, index) in heart" style="color: red; margin-right: 1%" class="fa fa-heart"></span>
+                       <strong>Lives :</strong> <span v-for="(heart, index) in heart" style="color: red; margin-right: 1%" class="fa fa-heart"></span>
                     </div>
                     <div class="col">
-                        Score : @{{ score }}
+                        <strong> Score : @{{ score }} </strong>
                     </div>
                 </div>
             </div>

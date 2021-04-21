@@ -9,51 +9,38 @@ use Illuminate\Support\Facades\File;
 class WordController extends Controller
 {
     public function getScrambleWords($type){
-        try{
-            $words = $this->getRandomWords($type, 1);
-            $scramble_words = array();
+        $words = $this->getRandomWords($type, 1);
+        $scramble_words = array();
 
-            foreach ($words as $word) {
-                $word_result['word_id'] = $word->id;
-                $word_result['word_scrambled'] = str_shuffle($word->word);
-                array_push($scramble_words, $word_result);
-            }
-
-            $res['status'] = "S";
-            $res['result'] = $scramble_words;
-
-        } catch(Exception $e){
-            $res['status'] = "E";
-            $res['message'] = $e->getMessage();
+        foreach ($words as $word) {
+            $word_result['word_id'] = $word->id;
+            do{
+                $shuffle = str_shuffle($word->word);
+                $word_result['word_scrambled'] = $shuffle;
+            } while($word->word == $shuffle);
+            array_push($scramble_words, $word_result);
         }
+
+        $res['status'] = "S";
+        $res['result'] = $scramble_words;
 
         return response()->json($res);
 
     }
 
     public function getWords(){
-        try {
-            $words = Word::get();
+        $words = Word::get();
 
-            $res['status'] = "S";
-            $res['result'] = $words;
+        $res['status'] = "S";
+        $res['result'] = $words;
 
-            return response()->json($words);
-
-        } catch(Exception $e){
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
+        return response()->json($words);
     }
 
     public function getRandomWords($type, $limit){
-        try{
-            $words = Word::inRandomOrder()->where('type', '=', $type)->limit($limit)->get();
+        $words = Word::inRandomOrder()->where('type', '=', $type)->limit($limit)->get();
 
-            return $words;
-
-        } catch(Exception $e){
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
+        return $words;
 
     }
 

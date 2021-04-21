@@ -49,7 +49,7 @@
             </div>
             <div class="col-md-8">
                 <div class="table-responsive">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" id="game-detail">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -107,6 +107,10 @@
                 this.game.date = new Date(this.game.created_at).toString("dd MMMM yyyy HH:mm")
 
                 this.game_detail = res.result.game_detail;
+
+                setTimeout(function () {
+                    $("#game-detail").DataTable();
+                }, 100);
             }
         },
     });
