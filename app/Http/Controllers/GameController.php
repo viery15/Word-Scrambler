@@ -34,6 +34,18 @@ class GameController extends Controller
         return response()->json($res);
     }
 
+    public function history(){
+        return view('admin.history');
+    }
+
+    public function getHistory(){
+        $game = Game::orderBy('user_score', 'DESC')->get();
+
+        $res['status'] = "S";
+        $res['result']['game'] = $game;
+        return response()->json($res);
+    }
+
     public function setProfile(Request $request){
         Session::put('name', $request->name);
         Session::put('email', $request->email);

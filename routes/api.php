@@ -22,7 +22,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/words', [WordController::class, 'getWords'])->name('word');
-
 Route::get('/result/{id}', [GameController::class, 'getResult'])->name('result');
+Route::get('/history', [GameController::class, 'getHistory']);
 
 
