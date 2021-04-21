@@ -49,8 +49,17 @@ Word Scramble Game
 
         <div class="card" id="card-main" style="display: none">
             <div class="card-header">
-                <span>Stage @{{ display.currentIndex  + 1}} of 10</span>
-                <span style="float:right"><span class="fa fa-clock"></span> 01:00</span>
+                <div class="row">
+                    <div class="col">
+                        <strong>Stage @{{ game.stage }}</strong>
+                    </div>
+                    <div class="col">
+                        Lives : <span v-for="(heart, index) in heart" style="color: red; margin-right: 1%" class="fa fa-heart"></span>
+                    </div>
+                    <div class="col">
+                        Score : @{{ score }}
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -84,8 +93,8 @@ Word Scramble Game
                 </div>
             </div>
             <div class="card-footer">
-                <button v-if="display.currentIndex == 9" v-on:click="submit()" style="float:right" class="btn btn-sm btn-success"><span class="fa fa-check"></span> Finish & Submit</button>
-                <button v-else v-on:click="next()" style="float:right" class="btn btn-sm btn-info">Next <span class="fa fa-arrow-right"></span></button>
+                <button v-if="pickedChar.length == display.charOption.length" v-on:click="check()" style="float:right" class="btn btn-sm btn-success">Submit <span class="fa fa-arrow-right"></span></button>
+                <button v-else disabled style="float:right; cursor: not-allowed" class="btn btn-sm btn-success">Submit <span class="fa fa-arrow-right"></span></button>
             </div>
         </div>
     </div>

@@ -4,7 +4,8 @@
         data: {
             api: {
                 scrambleWord: "/word/scrambleWord",
-                submit: "/game/scoring"
+                check: "/game/scoring",
+                submit: "/game/submit"
             },
             dataScrambleWord: [],
             display:{
@@ -18,8 +19,11 @@
             game:{
                 name: "",
                 email: "",
-                type: ""
-            }
+                type: "",
+                stage: 1
+            },
+            heart: 3,
+            score: 0
         },
 
         mounted(){
@@ -28,9 +32,6 @@
         },
 
         methods: {
-            async getScrambleWord(type){
-
-            },
 
             pickChar(index){
                 this.pickedChar.push(this.display.charOption[index].char);
@@ -48,42 +49,63 @@
                 this.display.userAnswer = "";
             },
 
-            next(){
-                Swal.fire({
-                    title: 'Confirmation',
-                    text: "Are you sure? you can't go back again.",
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Ya'
-                    }).then((result) => {
-                    if (result.value) {
+            async check(){
+                var data = {
+                    word_id: this.display.word.word_id,
+                    user_answer: this.pickedChar.join("")
+                }
 
-                        this.game_detail.push({
-                            word_id: this.display.word.word_id,
-                            word_scrambled: this.display.word.word_scrambled,
-                            user_answer: this.pickedChar.join("")
-                        });
-
-                        this.display.charOption = [];
-                        this.display.currentIndex++;
-                        this.display.word = this.dataScrambleWord[this.display.currentIndex];
-                        this.display.word.word_scrambled.split("").forEach((char) => {
-                            this.display.charOption.push({
-                                char: char,
-                                isPicked: false
-                            });
-                        })
-                        this.reset();
-
-                        this.$forceUpdate();
-                    }
+                const result = await $.ajax({
+                    url: this.api.check,
+                    type: "POST",
+                    data: data
                 });
+
+                if(result.result.user_score == 0){
+                    this.heart--;
+                    var msg = "";
+
+                    if(this.heart == 0) {
+                        this.gameOver();
+                    }
+                    else{
+                        if(this.heart == 1){
+                            msg = "One More Chance";
+                        }
+                        else if(this.heart > 1) {
+                            msg = this.heart + " Hearts Left";
+                        }
+
+                        Swal.fire({
+                            type: 'error',
+                            title: 'You Got it Wrong',
+                            text: msg
+                        });
+                    }
+                }
+                else {
+                    this.game.stage++;
+                    this.score += result.result.user_score;
+
+                    this.game_detail.push({
+                        word_id: this.display.word.word_id,
+                        word_scrambled: this.display.word.word_scrambled,
+                        user_answer: this.pickedChar.join(""),
+                        user_score: result.result.user_score
+                    });
+
+                    this.reset();
+
+                    this.getScrambledWord();
+                    this.$forceUpdate();
+                }
+
 
             },
 
             async selectDifficulty(type){
+                this.game.type = type;
+
                 Swal.fire({
                     title: 'Please Wait...',
                     allowOutsideClick: false,
@@ -92,14 +114,23 @@
                     },
                 });
 
+                this.getScrambledWord();
+
+                $("#card-difficulty").hide();
+                $("#card-main").show();
+
+                Swal.close();
+
+            },
+
+            async getScrambledWord(){
                 this.display.charOption = [];
+                this.display.user_answer = "";
 
                 const result = await $.ajax({
-                    url: this.api.scrambleWord + "/" + type,
+                    url: this.api.scrambleWord + "/" + this.game.type,
                     type: "GET"
                 });
-
-                this.game.type = type;
 
                 this.dataScrambleWord = result.result;
                 this.display.word = this.dataScrambleWord[0];
@@ -111,45 +142,32 @@
                         isPicked: false
                     });
                 });
-
-                $("#card-difficulty").hide();
-                $("#card-main").show();
-
-                Swal.close();
-
             },
 
-            async submit(){
-
-                this.game_detail.push({
-                    word_id: this.display.word.word_id,
-                    word_scrambled: this.display.word.word_scrambled,
-                    user_answer: this.pickedChar.join("")
-                });
-
+            async gameOver(){
 
                 Swal.fire({
-                    title: 'Please Wait...',
-                    allowOutsideClick: false,
-                    onBeforeOpen: () => {
-                        Swal.showLoading();
-                    },
+                    type: 'error',
+                    title: 'You Got it Wrong',
+                    text: "GAME OVER!",
+                    confirmButtonText: 'Ok',
+                    preConfirm: async () => {
+                        var data = {
+                            game: this.game,
+                            game_detail: this.game_detail
+                        }
+
+                        const result = await $.ajax({
+                            url: this.api.submit,
+                            type: "POST",
+                            data: data
+                        });
+
+                        if(result.status == "S"){
+                            window.location.href = '/game/result/' + result.result.game.id;
+                        }
+                    }
                 });
-
-                var data = {
-                    game: this.game,
-                    game_detail: this.game_detail
-                }
-
-                const result = await $.ajax({
-                    url: this.api.submit,
-                    type: "POST",
-                    data: data
-                });
-
-                Swal.close();
-
-                window.location.href = '/game/result/' + result.result.game.id;
             }
         },
     });

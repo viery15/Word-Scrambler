@@ -34,19 +34,14 @@
                         <td style="padding-left: 3%">@{{ game.type }}</td>
                     </tr>
                     <tr>
+                        <td>Stage</td>
+                        <td> : </td>
+                        <td style="padding-left: 3%">@{{ game.stage }}</td>
+                    </tr>
+                    <tr>
                         <td>Score</td>
                         <td> : </td>
-                        <td style="padding-left: 3%">@{{ game.user_score }}</td>
-                    </tr>
-                    <tr>
-                        <td>Maximum Score</td>
-                        <td> : </td>
-                        <td style="padding-left: 3%">@{{ game.max_score }} </td>
-                    </tr>
-                    <tr>
-                        <td>Percentage</td>
-                        <td> : </td>
-                        <td style="padding-left: 3%"><strong>@{{ game.percentage_score }}%</strong></td>
+                        <td style="padding-left: 3%"><strong>@{{ game.user_score }}</strong></td>
                     </tr>
                 </table>
                 <br>
@@ -60,9 +55,7 @@
                                 <th>No</th>
                                 <th>Scrambled Word</th>
                                 <th>User Answer</th>
-                                <th>Best Answer</th>
                                 <th>User Score</th>
-                                <th>Best Score</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -70,9 +63,7 @@
                                 <td>@{{ detail.seq }}</td>
                                 <td>@{{ detail.word_scrambled }}</td>
                                 <td>@{{ detail.user_answer }}</td>
-                                <td>@{{ detail.word }}</td>
                                 <td><strong>@{{ detail.user_score }}</strong></td>
-                                <td>@{{ detail.max_score }}</td>
                             </tr>
                         </tbody>
                     </table>

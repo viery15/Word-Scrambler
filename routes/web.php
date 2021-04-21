@@ -25,6 +25,7 @@ Route::get('/word/scrambleWord/{type}', [WordController::class, 'getScrambleWord
 Route::get('/play', [GameController::class, 'play'])->name('game');
 Route::post('/game/profile', [GameController::class, 'setProfile'])->name('game');
 Route::post('/game/scoring', [GameController::class, 'scoring'])->name('game');
+Route::post('/game/submit', [GameController::class, 'submit'])->name('game');
 Route::get('/game/result/{id}', [GameController::class, 'result'])->name('game');
 
 

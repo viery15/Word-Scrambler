@@ -10,7 +10,7 @@ class WordController extends Controller
 {
     public function getScrambleWords($type){
         try{
-            $words = $this->getRandomWords($type, 10);
+            $words = $this->getRandomWords($type, 1);
             $scramble_words = array();
 
             foreach ($words as $word) {
