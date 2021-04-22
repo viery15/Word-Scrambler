@@ -20,17 +20,25 @@
                     email: this.email
                 }
 
-                console.log(profile);
+                if(this.name == "" || this.email == ""){
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Oopss',
+                        text: "Username or Email is Empty!",
+                        confirmButtonText: 'OK!',
+                    });
+                }
+                else {
+                    const result = await $.ajax({
+                        url: this.api.setProfile,
+                        type: 'POST',
+                        data: profile,
+                        dataType: "JSON"
+                    });
 
-                const result = await $.ajax({
-                    url: this.api.setProfile,
-                    type: 'POST',
-                    data: profile,
-                    dataType: "JSON"
-                });
-
-                if(result.status == "S"){
-                    window.location.href = '/play';
+                    if(result.status == "S"){
+                        window.location.href = '/play';
+                    }
                 }
             }
         },

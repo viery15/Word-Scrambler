@@ -12,8 +12,8 @@
     <link rel="stylesheet" href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
     <style>
         .bg {
-            background-image: url('{{ asset('images/word-bg.jpg')}}');
-            background-size: auto;
+            background-image: url('{{ asset('images/bg.jpg')}}');
+            background-size: cover;
             background-repeat: no-repeat;
         }
 

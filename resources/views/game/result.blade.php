@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="card" style="margin-top: 3%">
-    <div class="card-header">
+    <div class="card-header" style="background-color: rgb(47 111 208);color: white;">
         <span>Game Result</span>
     </div>
     <div class="card-body">

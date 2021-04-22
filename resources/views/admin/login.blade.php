@@ -19,7 +19,7 @@ Word Scramble Game
                     </div>
                     <div class="form-group">
                         <label>Password</label>
-                        <input name="password" v-model="password" type="text" class="form-control" placeholder="Password">
+                        <input name="password" v-model="password" type="password" class="form-control" placeholder="Password">
                     </div>
                 </form>
             </div>

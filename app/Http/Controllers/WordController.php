@@ -9,17 +9,17 @@ use Illuminate\Support\Facades\File;
 class WordController extends Controller
 {
     public function getScrambleWords($type){
-        $words = $this->getRandomWords($type, 1);
+        $word = $this->getRandomWords($type, 1);
         $scramble_words = array();
 
-        foreach ($words as $word) {
-            $word_result['word_id'] = $word->id;
-            do{
-                $shuffle = str_shuffle($word->word);
-                $word_result['word_scrambled'] = $shuffle;
-            } while($word->word == $shuffle);
-            array_push($scramble_words, $word_result);
-        }
+        $word_result['word_id'] = $word[0]->id;
+        $word_result['word'] = $word[0]->word;
+        do{
+            $shuffle = str_shuffle($word[0]->word);
+            $word_result['word_scrambled'] = $shuffle;
+        } while($word[0]->word == $shuffle);
+        array_push($scramble_words, $word_result);
+
 
         $res['status'] = "S";
         $res['result'] = $scramble_words;

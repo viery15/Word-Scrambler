@@ -23,7 +23,10 @@
                 stage: 1
             },
             heart: 3,
-            score: 0
+            hint: 3,
+            score: 0,
+            hintChar: [],
+            indexHintPicked: []
         },
 
         mounted(){
@@ -34,22 +37,43 @@
         methods: {
 
             pickChar(index){
-                this.pickedChar.push(this.display.charOption[index].char);
-                this.display.charOption[index].isPicked = true;
 
+                var find = true;
+                this.pickedChar.forEach((char, i) => {
+                    if(char == "" && find == true){
+                        this.pickedChar[i] = this.display.charOption[index].char;
+                        find = false;
+                    }
+                });
+
+                this.display.charOption[index].isPicked = true;
                 this.display.userAnswer = this.pickedChar.join(" ");
                 this.$forceUpdate();
             },
 
             reset(){
-                this.pickedChar = [];
                 this.display.charOption.forEach((char, index) => {
-                    char.isPicked = false;
+                    if(char.isHint != true){
+                        char.isPicked = false;
+                    }
                 });
                 this.display.userAnswer = "";
+
+                this.pickedChar.forEach((picked, i) => {
+                    var reset = true;
+                    this.indexHintPicked.forEach((ind) => {
+                        if(i == ind){
+                            reset = false;
+                        }
+                    });
+                    if(reset === true){
+                        this.pickedChar[i] = "";
+                    }
+                })
             },
 
             async check(){
+                this.indexHintPicked = [];
                 var data = {
                     word_id: this.display.word.word_id,
                     user_answer: this.pickedChar.join("")
@@ -125,6 +149,7 @@
 
             async getScrambledWord(){
                 this.display.charOption = [];
+                this.pickedChar = [];
                 this.display.user_answer = "";
 
                 const result = await $.ajax({
@@ -139,8 +164,11 @@
                 this.display.word.word_scrambled.split("").forEach((char) => {
                     this.display.charOption.push({
                         char: char,
-                        isPicked: false
+                        isPicked: false,
+                        isHint: false
                     });
+                    this.pickedChar.push("");
+                    this.hintChar.push("");
                 });
             },
 
@@ -168,6 +196,36 @@
                         }
                     }
                 });
+            },
+
+            setHint(){
+                this.reset();
+                for (let i = 0; i < this.pickedChar.length; i++) {
+                    if(this.pickedChar[i] == ""){
+                        this.pickedChar[i] = this.display.word.word.charAt(i);
+                        this.indexHintPicked.push(i);
+
+                        for (let j = 0; j < this.display.charOption.length; j++) {
+                            if(this.display.charOption[j].char == this.display.word.word.charAt(i) && this.display.charOption[j].isHint != true){
+                                this.display.charOption[j].isPicked = true;
+                                this.display.charOption[j].isHint = true;
+                                break;
+                            }
+
+                        }
+                        this.hint--;
+                        break;
+                    }
+
+                }
+
+                this.$forceUpdate();
+            },
+
+            getRandomInt(min, max) {
+                min = Math.ceil(min);
+                max = Math.floor(max);
+                return Math.floor(Math.random() * (max - min + 1)) + min;
             }
         },
     });
