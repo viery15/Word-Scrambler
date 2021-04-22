@@ -1,4 +1,4 @@
-@extends('layouts.index')
+@extends('Layouts.index')
 
 @section('title')
     Game Result

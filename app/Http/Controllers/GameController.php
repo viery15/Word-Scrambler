@@ -13,15 +13,15 @@ class GameController extends Controller
 {
 
     public function index(){
-        return view('game.index');
+        return view('Game.index');
     }
 
     public function play(){
-        return view('game.play');
+        return view('Game.play');
     }
 
     public function result($id){
-        return view('game.result', compact('id'));
+        return view('Game.result', compact('id'));
     }
 
     public function getResult($id){
@@ -35,7 +35,7 @@ class GameController extends Controller
     }
 
     public function history(){
-        return view('admin.history');
+        return view('Admin.history');
     }
 
     public function getHistory(){
@@ -60,17 +60,23 @@ class GameController extends Controller
         $game = $request->game;
         $game_detail = $request->game_detail;
         $game['user_score'] = 0;
-        foreach ($game_detail as $detail) {
-            $game['user_score'] += $detail['user_score'];
+        $game_detail_res = [];
+
+        if($game_detail != ""){
+            foreach ($game_detail as $detail) {
+                $game['user_score'] += $detail['user_score'];
+            }
         }
 
         $game_res = Game::create($game);
-        $game_detail_res = [];
-        for ($i=0; $i < count($game_detail); $i++) {
-            $game_detail[$i]['game_id'] = $game_res['id'];
-            $game_detail[$i]['seq'] = $i + 1;
-            $detail_res = GameDetail::create($game_detail[$i]);
-            array_push($game_detail_res, $detail_res);
+
+        if($game_detail != ""){
+            for ($i=0; $i < count($game_detail); $i++) {
+                $game_detail[$i]['game_id'] = $game_res['id'];
+                $game_detail[$i]['seq'] = $i + 1;
+                $detail_res = GameDetail::create($game_detail[$i]);
+                array_push($game_detail_res, $detail_res);
+            }
         }
 
         $res['status'] = "S";
