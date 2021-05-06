@@ -20,6 +20,7 @@ Route::get('/', [GameController::class, 'index'])->name('game');
 
 //WORD
 Route::get('/word/export', [WordController::class, 'export'])->name('word');
+Route::get('/words', [WordController::class, 'index'])->name('word');
 Route::get('/word/scrambleWord/{type}', [WordController::class, 'getScrambleWords'])->name('word');
 
 //GAME

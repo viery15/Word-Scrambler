@@ -73,6 +73,13 @@
             },
 
             async check(){
+                Swal.fire({
+                    title: 'Please Wait...',
+                    allowOutsideClick: false,
+                    onBeforeOpen: () => {
+                        Swal.showLoading()
+                    },
+                });
                 this.indexHintPicked = [];
                 var data = {
                     word_id: this.display.word.word_id,
@@ -86,6 +93,7 @@
                 });
 
                 if(result.result.user_score == 0){
+                    Swal.close();
                     this.heart--;
                     var msg = "";
 
@@ -122,8 +130,9 @@
 
                     this.getScrambledWord();
                     this.$forceUpdate();
-                }
+                    Swal.close();
 
+                }
 
             },
 

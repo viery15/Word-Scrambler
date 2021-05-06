@@ -23,8 +23,8 @@ class AuthController extends Controller
     {
 
         $data = [
-            'username'     => $request->username,
-            'password'  => $request->password,
+            'username' => $request->username,
+            'password' => $request->password,
         ];
 
         Auth::attempt($data);
@@ -35,7 +35,7 @@ class AuthController extends Controller
         }
         else {
             $res['status'] = "E";
-            $res['message'] = "Login Faild";
+            $res['message'] = "Login Failed";
         }
 
         return response()->json($res);

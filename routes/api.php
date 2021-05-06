@@ -22,6 +22,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/words', [WordController::class, 'getWords'])->name('word');
+Route::post('/words', [WordController::class, 'create'])->name('word');
+Route::delete('/words/{id}', [WordController::class, 'delete'])->name('word');
+Route::put('/words/{id}', [WordController::class, 'update'])->name('word');
+
 Route::get('/result/{id}', [GameController::class, 'getResult'])->name('result');
 Route::get('/history', [GameController::class, 'getHistory']);
 

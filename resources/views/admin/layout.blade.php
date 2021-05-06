@@ -26,6 +26,9 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="/history">History <span class="sr-only">(current)</span></a>
                 </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/words">Words <span class="sr-only">(current)</span></a>
+                </li>
 
             </ul>
             <ul class="nav navbar-nav navbar-right">

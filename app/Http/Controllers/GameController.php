@@ -24,6 +24,10 @@ class GameController extends Controller
         return view('Game.result', compact('id'));
     }
 
+    public function history(){
+        return view('Admin.history');
+    }
+
     public function getResult($id){
         $game = Game::find($id);
         $game_detail = GameDetail::where('game_id', '=', $game['id'])->get();
@@ -31,11 +35,8 @@ class GameController extends Controller
         $res['status'] = "S";
         $res['result']['game'] = $game;
         $res['result']['game_detail'] = $game_detail;
-        return response()->json($res);
-    }
 
-    public function history(){
-        return view('Admin.history');
+        return response()->json($res);
     }
 
     public function getHistory(){
@@ -43,6 +44,7 @@ class GameController extends Controller
 
         $res['status'] = "S";
         $res['result']['game'] = $game;
+
         return response()->json($res);
     }
 
@@ -92,11 +94,9 @@ class GameController extends Controller
         $word = Word::where('id', '=', $request->word_id)->first();
         $user_answer = Word::where('word', '=', $request->user_answer)->first();
 
+        $score = 0;
         if($user_answer !== null){
             $score = strlen($request->user_answer);
-        }
-        else {
-            $score = 0;
         }
 
         $max_score = strlen($word['word']);

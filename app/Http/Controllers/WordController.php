@@ -4,10 +4,67 @@ namespace App\Http\Controllers;
 
 use App\Models\Word;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
 class WordController extends Controller
 {
+
+    public function index(){
+        return view('Word.index');
+    }
+
+    public function create(Request $request){
+
+        try{
+            if(Word::create($request->word)){
+                $res['status'] = "S";
+                $res['msg'] = "Saved!";
+            }
+        } catch(Exception $e){
+            $res['status'] = "E";
+            $res['msg'] = $e->getMessage();
+        }
+
+        return $res;
+
+    }
+
+    public function delete($id){
+
+        try{
+            if(Word::destroy($id)){
+                $res['status'] = "S";
+                $res['msg'] = "Deleted!";
+            }
+        } catch(Exception $e){
+            $res['status'] = "E";
+            $res['msg'] = $e->getMessage();
+        }
+
+        return $res;
+
+    }
+
+    public function update(Request $request, $id){
+
+        try{
+            $word = Word::where('id', '=', $id)->first();
+            if ($word !== null) {
+                $word->fill($request->word)->save();
+
+                $res['status'] = "S";
+                $res['msg'] = "Updated!";
+            }
+        } catch(Exception $e){
+            $res['status'] = "E";
+            $res['msg'] = $e->getMessage();
+        }
+
+        return $res;
+
+    }
+
     public function getScrambleWords($type){
         $word = $this->getRandomWords($type, 1);
         $scramble_words = array();
@@ -19,7 +76,6 @@ class WordController extends Controller
             $word_result['word_scrambled'] = $shuffle;
         } while($word[0]->word == $shuffle);
         array_push($scramble_words, $word_result);
-
 
         $res['status'] = "S";
         $res['result'] = $scramble_words;
@@ -46,7 +102,6 @@ class WordController extends Controller
 
     public function export(){
         $file = File::get(storage_path('words/common.txt'));
-        // $input['type'] = "medium";
 
         $save = [];
         foreach (explode("\n", $file) as $line){
